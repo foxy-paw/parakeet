@@ -2,40 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FoXY | 3D Artist Portfolio</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
     <style>
         /* CSS Reset & Base Styles */
         :root {
-            --color-primary: #8B4513; /* SaddleBrown */
-            --color-secondary: #D4AF37; /* Gold */
-            --color-dark: #1A1A1A; /* Deep Charcoal */
-            --color-accent: #8B0000; /* DarkRed */
+            --color-primary: #8B4513;
+            --color-secondary: #D4AF37;
+            --color-dark: #1A1A1A;
+            --color-accent: #8B0000;
             --color-light: #E6E6E6;
             --text-font: 'Roboto Condensed', sans-serif;
-            --heading-font: 'Cinzel', serif;
+            --heading-font: 'MedievalSharp', cursive;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            overflow-x: hidden;
+            touch-action: pan-y;
         }
 
         body {
             font-family: var(--text-font);
             color: var(--color-light);
             background-color: var(--color-dark);
-            overflow-x: hidden;
             line-height: 1.6;
+            position: relative;
+            width: 100%;
+            overflow-x: hidden;
         }
 
         h1, h2, h3, h4 {
@@ -126,7 +132,7 @@
             background-size: 20px;
         }
 
-        /* Enhanced Navbar Styles */
+        /* Enhanced Navbar */
         .navbar {
             position: fixed;
             top: 0;
@@ -217,7 +223,8 @@
         .menu-toggle {
             display: none;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -229,8 +236,6 @@
             padding: 0;
             z-index: 1001;
             position: relative;
-            align-items: center;
-            justify-content: center;
         }
 
         .menu-toggle:focus {
@@ -279,10 +284,9 @@
             position: fixed;
             top: 0;
             right: -100%;
-            width: 80%;
-            max-width: 400px;
+            width: 100%;
             height: 100vh;
-            background-color: rgba(26, 26, 26, 0.95);
+            background-color: rgba(26, 26, 26, 0.98);
             backdrop-filter: blur(10px);
             z-index: 1000;
             display: flex;
@@ -290,10 +294,10 @@
             align-items: center;
             justify-content: center;
             gap: 30px;
-            transition: right 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
-            padding: 80px 20px;
-            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
-            border-left: 1px solid rgba(212, 175, 55, 0.3);
+            transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            padding: 20% 10%;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .mobile-menu.active {
@@ -310,7 +314,7 @@
             margin-top: 20px;
         }
 
-        /* Hero Section */
+        /* Hero Section with GIF */
         .hero {
             height: 100vh;
             position: relative;
@@ -329,27 +333,26 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('images/Hero-backgound.jpg') no-repeat center center;
-            background-size: cover;
-            z-index: -2;
+            background: linear-gradient(to bottom, rgba(26, 26, 26, 0.2), rgba(26, 26, 26, 0.8));
+            z-index: 1;
         }
 
-        .hero::after {
-            content: '';
+        .hero-gif {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, rgba(26, 26, 26, 0.2), rgba(26, 26, 26, 0.8));
+            object-fit: cover;
             z-index: -1;
+            opacity: 0.7;
         }
 
         .hero-content {
             max-width: 800px;
             padding: 0 20px;
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
         .hero-title {
@@ -374,6 +377,7 @@
             height: 60px;
             cursor: pointer;
             animation: bounce 2s infinite;
+            z-index: 2;
         }
 
         @keyframes bounce {
@@ -386,16 +390,6 @@
             60% {
                 transform: translateY(-10px) translateX(-50%);
             }
-        }
-
-        /* 3D Character Container */
-        #character-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
         }
 
         /* Projects Section */
@@ -418,7 +412,6 @@
 
         .projects-container {
             position: relative;
-            height: 600px;
             margin-top: 50px;
         }
 
@@ -426,13 +419,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100%;
+            flex-wrap: wrap;
+            gap: 30px;
             perspective: 1000px;
             position: relative;
         }
 
         .project-card {
-            position: absolute;
             width: 300px;
             height: 450px;
             background: linear-gradient(135deg, rgba(43, 43, 43, 0.8), rgba(26, 26, 26, 0.9));
@@ -442,6 +435,7 @@
             transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
             transform-style: preserve-3d;
             border: 1px solid rgba(212, 175, 55, 0.3);
+            cursor: pointer;
         }
 
         .project-card::before {
@@ -456,34 +450,8 @@
         }
 
         .project-card.active {
-            width: 400px;
-            height: 550px;
-            z-index: 10;
+            transform: scale(1.05);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-        }
-
-        .project-card.prev {
-            transform: translateX(-200px) scale(0.9);
-            opacity: 0.8;
-            z-index: 5;
-        }
-
-        .project-card.next {
-            transform: translateX(200px) scale(0.9);
-            opacity: 0.8;
-            z-index: 5;
-        }
-
-        .project-card.far-prev {
-            transform: translateX(-400px) scale(0.8);
-            opacity: 0.6;
-            z-index: 1;
-        }
-
-        .project-card.far-next {
-            transform: translateX(400px) scale(0.8);
-            opacity: 0.6;
-            z-index: 1;
         }
 
         .project-image {
@@ -864,11 +832,6 @@
                 width: 250px;
                 height: 400px;
             }
-            
-            .project-card.active {
-                width: 350px;
-                height: 500px;
-            }
         }
 
         @media (max-width: 992px) {
@@ -887,63 +850,32 @@
             .hero-title {
                 font-size: 3.5rem;
             }
-            
-            .project-cards {
-                height: 500px;
-            }
-            
-            .project-card {
-                width: 200px;
-                height: 350px;
-            }
-            
-            .project-card.active {
-                width: 300px;
-                height: 450px;
-            }
-            
-            .project-card.prev {
-                transform: translateX(-150px) scale(0.9);
-            }
-            
-            .project-card.next {
-                transform: translateX(150px) scale(0.9);
-            }
-            
-            .project-card.far-prev {
-                transform: translateX(-300px) scale(0.8);
-            }
-            
-            .project-card.far-next {
-                transform: translateX(300px) scale(0.8);
-            }
         }
 
         @media (max-width: 768px) {
             .hero-title {
                 font-size: 3rem;
+                padding: 0 1rem;
             }
             
             .hero-subtitle {
                 font-size: 1.2rem;
+                padding: 0 1.5rem;
             }
             
-            .projects-container {
-                height: 400px;
+            .project-cards {
+                flex-direction: column;
+                align-items: center;
             }
             
             .project-card {
-                width: 150px;
-                height: 300px;
+                width: 80% !important;
+                height: 400px !important;
+                margin-bottom: 2rem;
             }
             
-            .project-card.active {
-                width: 250px;
-                height: 400px;
-            }
-            
-            .project-card.prev, .project-card.next {
-                opacity: 0;
+            .section-title {
+                font-size: 2rem;
             }
             
             .about-content {
@@ -960,22 +892,9 @@
                 font-size: 2.5rem;
             }
             
-            .section-title {
-                font-size: 2rem;
-            }
-            
-            .projects-container {
-                height: 350px;
-            }
-            
             .project-card {
-                width: 120px;
-                height: 250px;
-            }
-            
-            .project-card.active {
-                width: 200px;
-                height: 350px;
+                width: 90% !important;
+                height: 350px !important;
             }
             
             .project-info {
@@ -993,16 +912,31 @@
             .contact-form {
                 padding: 20px;
             }
-            
-            .mobile-menu {
+        }
+
+        /* Prevent horizontal scroll on mobile */
+        @media (max-width: 480px) {
+            html, body {
+                overflow-x: hidden;
                 width: 100%;
-                max-width: 100%;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Enhanced Navbar -->
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="logo-container">
             <a href="#" class="logo-link">
@@ -1025,17 +959,17 @@
         
         <div class="mobile-menu">
             <div class="social-icons mobile-socials">
-                <a href="#"><img src="https://via.placeholder.com/24x24/8B4513/FFFFFF?text=TW" alt="Twitter" class="social-icon"></a>
-                <a href="#"><img src="https://via.placeholder.com/24x24/8B4513/FFFFFF?text=IG" alt="Instagram" class="social-icon"></a>
-                <a href="#"><img src="https://via.placeholder.com/24x24/8B4513/FFFFFF?text=AR" alt="ArtStation" class="social-icon"></a>
+                <a href="#"><img src="images/twitter.png" alt="Twitter" class="social-icon"></a>
+                <a href="#"><img src="images/instagram.png" alt="Instagram" class="social-icon"></a>
+                <a href="#"><img src="images/artstation.png" alt="ArtStation" class="social-icon"></a>
             </div>
             <a href="#contact" class="hire-btn mobile-hire-btn">Hire Me</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Section with GIF -->
     <section class="hero">
-        <div id="character-container"></div>
+        <img src="images/Hero-backgound.jpg" alt="3D Art Showcase" class="hero-gif">
         <div class="hero-content">
             <h1 class="hero-title">3D Journey With FoXY</h1>
             <p class="hero-subtitle">Crafting immersive 3D worlds and characters for games and films</p>
@@ -1052,7 +986,7 @@
             <h2 class="section-title">Featured Projects</h2>
             <div class="projects-container">
                 <div class="project-cards">
-                    <div class="project-card active" data-index="0">
+                    <div class="project-card active">
                         <div class="project-image" style="background-image: url('https://via.placeholder.com/400x300/1A1A1A/D4AF37?text=Project+1')"></div>
                         <div class="project-info">
                             <h3 class="project-title">Dark Kingdom</h3>
@@ -1060,7 +994,7 @@
                             <a href="#" class="project-btn">View Project</a>
                         </div>
                     </div>
-                    <div class="project-card next" data-index="1">
+                    <div class="project-card">
                         <div class="project-image" style="background-image: url('https://via.placeholder.com/400x300/1A1A1A/D4AF37?text=Project+2')"></div>
                         <div class="project-info">
                             <h3 class="project-title">Cyber Samurai</h3>
@@ -1068,27 +1002,11 @@
                             <a href="#" class="project-btn">View Project</a>
                         </div>
                     </div>
-                    <div class="project-card far-next" data-index="2">
+                    <div class="project-card">
                         <div class="project-image" style="background-image: url('https://via.placeholder.com/400x300/1A1A1A/D4AF37?text=Project+3')"></div>
                         <div class="project-info">
                             <h3 class="project-title">Ancient Relics</h3>
                             <p class="project-desc">A collection of magical artifacts and weapons with intricate designs and lore.</p>
-                            <a href="#" class="project-btn">View Project</a>
-                        </div>
-                    </div>
-                    <div class="project-card prev" data-index="3">
-                        <div class="project-image" style="background-image: url('https://via.placeholder.com/400x300/1A1A1A/D4AF37?text=Project+4')"></div>
-                        <div class="project-info">
-                            <h3 class="project-title">Space Outpost</h3>
-                            <p class="project-desc">Modular sci-fi environment assets for creating futuristic space stations.</p>
-                            <a href="#" class="project-btn">View Project</a>
-                        </div>
-                    </div>
-                    <div class="project-card far-prev" data-index="4">
-                        <div class="project-image" style="background-image: url('https://via.placeholder.com/400x300/1A1A1A/D4AF37?text=Project+5')"></div>
-                        <div class="project-info">
-                            <h3 class="project-title">Mythical Creatures</h3>
-                            <p class="project-desc">High-poly creature designs inspired by world mythology and folklore.</p>
                             <a href="#" class="project-btn">View Project</a>
                         </div>
                     </div>
@@ -1205,42 +1123,44 @@
     </footer>
 
     <script>
-        // Enhanced JavaScript for the portfolio
         document.addEventListener('DOMContentLoaded', function() {
             // Mobile menu toggle
             const menuToggle = document.querySelector('.menu-toggle');
             const mobileMenu = document.querySelector('.mobile-menu');
-            
+            const body = document.body;
+
             menuToggle.addEventListener('click', function() {
                 this.classList.toggle('active');
                 mobileMenu.classList.toggle('active');
                 
-                // Toggle body scroll when menu is open
                 if (mobileMenu.classList.contains('active')) {
-                    document.body.style.overflow = 'hidden';
+                    body.style.overflow = 'hidden';
+                    body.style.position = 'fixed';
+                    body.style.width = '100%';
                 } else {
-                    document.body.style.overflow = '';
+                    body.style.overflow = '';
+                    body.style.position = '';
+                    body.style.width = '';
                 }
             });
-            
-            // Close menu when clicking on a link
-            const mobileLinks = document.querySelectorAll('.mobile-menu a');
-            mobileLinks.forEach(link => {
-                link.addEventListener('click', function() {
+
+            // Close menu when clicking links
+            document.querySelectorAll('.mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
                     menuToggle.classList.remove('active');
                     mobileMenu.classList.remove('active');
-                    document.body.style.overflow = '';
+                    body.style.overflow = '';
+                    body.style.position = '';
                 });
             });
-            
-            // Navbar scroll effect
-            window.addEventListener('scroll', function() {
-                const navbar = document.querySelector('.navbar');
-                if (window.scrollY > 50) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
+
+            // Project card interaction
+            const projectCards = document.querySelectorAll('.project-card');
+            projectCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    projectCards.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                });
             });
 
             // GSAP Animations
@@ -1268,13 +1188,6 @@
                 opacity: 0,
                 delay: 0.6,
                 ease: 'power3.out'
-            });
-
-            gsap.from('.scroll-down', {
-                duration: 1.5,
-                opacity: 0,
-                delay: 1.5,
-                ease: 'power2.inOut'
             });
 
             // Section animations
@@ -1306,39 +1219,6 @@
                 }
             });
 
-            // Project cards animation
-            const projectCards = document.querySelectorAll('.project-card');
-            projectCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const currentActive = document.querySelector('.project-card.active');
-                    const currentIndex = parseInt(currentActive.dataset.index);
-                    const clickedIndex = parseInt(this.dataset.index);
-                    
-                    // Calculate new positions
-                    const diff = clickedIndex - currentIndex;
-                    const totalCards = projectCards.length;
-                    
-                    projectCards.forEach((card, index) => {
-                        const cardIndex = parseInt(card.dataset.index);
-                        let newIndex = (cardIndex - diff + totalCards) % totalCards;
-                        
-                        card.classList.remove('active', 'prev', 'next', 'far-prev', 'far-next');
-                        
-                        if (newIndex === 0) {
-                            card.classList.add('active');
-                        } else if (newIndex === 1) {
-                            card.classList.add('next');
-                        } else if (newIndex === 2) {
-                            card.classList.add('far-next');
-                        } else if (newIndex === totalCards - 1) {
-                            card.classList.add('prev');
-                        } else if (newIndex === totalCards - 2) {
-                            card.classList.add('far-prev');
-                        }
-                    });
-                });
-            });
-
             // Animate skill bars
             gsap.utils.toArray('.skill-progress').forEach(bar => {
                 ScrollTrigger.create({
@@ -1353,108 +1233,16 @@
                 });
             });
 
-            // 3D Character Initialization
-            init3DCharacter();
+            // Navbar scroll effect
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
         });
-
-        // 3D Character with Three.js
-        function init3DCharacter() {
-  const container = document.getElementById('character-container');
-  if (!container) return;
-
-  // Scene setup
-  const scene = new THREE.Scene();
-  scene.background = null;
-  
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.z = 4; // Camera distance
-  
-  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  container.appendChild(renderer.domElement);
-
-  // Lighting
-  const ambientLight = new THREE.AmbientLight(0x404040, 6);
-  scene.add(ambientLight);
-  
-  const directionalLight = new THREE.DirectionalLight(0xD4AF37, 1);
-  directionalLight.position.set(1, 1, 1);
-  scene.add(directionalLight);
-
-  // Model loader
-  const loader = new THREE.GLTFLoader();
-  let model;
-
-  loader.load(
-    'images/character.glb', // Update path
-    (gltf) => {
-      model = gltf.scene;
-      
-      // 1. CENTERING THE MODEL
-      const box = new THREE.Box3().setFromObject(model);
-      const center = box.getCenter(new THREE.Vector3());
-      model.position.x -= center.x;
-      model.position.y -= center.y;
-      model.position.z -= center.z;
-      
-      // 2. SCALING CONTROL
-      const size = box.getSize(new THREE.Vector3());
-      const maxDim = Math.max(size.x, size.y, size.z);
-      const scale = 4 / maxDim; // Adjust this value to change size
-      model.scale.set(scale, scale, scale);
-      
-      // 3. POSITION ADJUSTMENT (Y-axis)
-      model.position.y = -2; // Lower the model if needed
-      
-      scene.add(model);
-    },
-    undefined,
-    (error) => {
-      console.error('Error loading model:', error);
-      // Fallback cube if model fails to load
-      const geometry = new THREE.BoxGeometry(1, 1, 1);
-      const material = new THREE.MeshBasicMaterial({ color: 0xD4AF37 });
-      const cube = new THREE.Mesh(geometry, material);
-      scene.add(cube);
-    }
-  );
-
-  // Mouse interaction
-  let mouseX = 0;
-  let mouseY = 0;
-  const windowHalfX = window.innerWidth / 2;
-  const windowHalfY = window.innerHeight / 2;
-
-  document.addEventListener('mousemove', (event) => {
-    mouseX = (event.clientX - windowHalfX) / 100;
-    mouseY = (event.clientY - windowHalfY) / 100;
-  });
-
-  // Animation loop
-  function animate() {
-    requestAnimationFrame(animate);
-    
-    if (model) {
-      // Smooth rotation with mouse
-      model.rotation.y = mouseX * 0.1;
-      model.rotation.x = -mouseY * 0.05;
-      
-      // Auto-rotate when idle (optional)
-      model.rotation.y += 0.001;
-    }
-    
-    renderer.render(scene, camera);
-  }
-
-  // Handle window resize
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
-
-  animate();
-}
     </script>
 </body>
 </html>
